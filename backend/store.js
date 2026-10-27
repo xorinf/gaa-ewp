@@ -9,10 +9,31 @@ const path = require("path");
 const { XMLParser, XMLBuilder } = require("fast-xml-parser");
 const { Libxml } = require("node-libxml");
 
-const DATA_DIR = process.env.DATA_DIR
-  ? path.resolve(process.env.DATA_DIR)
-  : path.join(__dirname, "data");
+const DATA_DIR = resolveDataDir();
 const DTD_DIR = path.join(__dirname, "dtd");
+
+// Uses DATA_DIR when it is set and writable. Without a persistent disk (for
+// example on Render's free plan) that path cannot be created, so fall back to
+// a folder inside the project and say so.
+function resolveDataDir() {
+  const configured = process.env.DATA_DIR
+    ? path.resolve(process.env.DATA_DIR)
+    : path.join(__dirname, "data");
+  try {
+    fs.mkdirSync(configured, { recursive: true });
+    fs.accessSync(configured, fs.constants.W_OK);
+    return configured;
+  } catch (error) {
+    if (!process.env.DATA_DIR) throw error;
+    const fallback = path.join(__dirname, "data");
+    fs.mkdirSync(fallback, { recursive: true });
+    console.warn(
+      `DATA_DIR (${configured}) is not writable (${error.code}). Using ${fallback} instead. ` +
+        "Data will not survive a redeploy until a persistent disk is attached."
+    );
+    return fallback;
+  }
+}
 
 const parser = new XMLParser({
   ignoreAttributes: false,
