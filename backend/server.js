@@ -217,13 +217,20 @@ app.get("/api/products", (req, res) => {
   res.json({ products });
 });
 
-// One product with its wishlist count (used by the owner dashboard).
+// One product with its wishlist count. The count is only shown to the owner
+// of the shop the product belongs to.
 app.get("/api/products/:id", (req, res) => {
   const row = store.read("products").find((p) => p.id === req.params.id);
   if (!row) return res.status(404).json({ message: "Product not found." });
-  const counts = wishlistCounts(row.shopId);
   const names = shopNames();
-  res.json({ product: { ...publicProduct(row, names[row.shopId] || ""), wishlistCount: counts[row.id] || 0 } });
+  const product = publicProduct(row, names[row.shopId] || "");
+
+  const shop = store.read("shops").find((s) => s.id === row.shopId);
+  if (req.user && shop && shop.ownerId === req.user.id) {
+    const counts = wishlistCounts(row.shopId);
+    product.wishlistCount = counts[row.id] || 0;
+  }
+  res.json({ product });
 });
 
 // ---------------------------------------------------------------- wishlists

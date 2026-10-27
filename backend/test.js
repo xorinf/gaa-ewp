@@ -303,6 +303,47 @@ test("deleting a product also clears its wishlist entries", async () => {
   assert.equal(wishlist.body.items.length, 0);
 });
 
+test("the wishlist count is only shown to the owner of that product's shop", async () => {
+  const owner = client();
+  await owner("/api/auth/login", {
+    method: "POST",
+    body: JSON.stringify({ email: "ravi@example.com", password: "secret123" })
+  });
+  const created = await owner("/api/owner/products", {
+    method: "POST",
+    body: JSON.stringify({ name: "Privacy", type: "grocery", category: "Snacks", unit: "pack", price: "50", stock: 5 })
+  });
+  const productId = created.body.product.id;
+
+  const customer = client();
+  await customer("/api/auth/login", {
+    method: "POST",
+    body: JSON.stringify({ email: "asha@example.com", password: "secret123" })
+  });
+  await customer("/api/wishlist", { method: "POST", body: JSON.stringify({ productId }) });
+
+  // The owner of the shop sees the count.
+  const asOwner = await owner(`/api/products/${productId}`);
+  assert.equal(asOwner.body.product.wishlistCount, 1);
+
+  // A customer must not see anyone else's count.
+  const asCustomer = await customer(`/api/products/${productId}`);
+  assert.equal(asCustomer.body.product.wishlistCount, undefined);
+
+  // A signed-out visitor must not see it either.
+  const anonymous = await client()(`/api/products/${productId}`);
+  assert.equal(anonymous.body.product.wishlistCount, undefined);
+
+  // A different owner must not see another shop's count.
+  const otherOwner = client();
+  await otherOwner("/api/auth/login", {
+    method: "POST",
+    body: JSON.stringify({ email: "other@example.com", password: "secret123" })
+  });
+  const asOtherOwner = await otherOwner(`/api/products/${productId}`);
+  assert.equal(asOtherOwner.body.product.wishlistCount, undefined);
+});
+
 test("signing out clears the session", async () => {
   const call = client();
   await call("/api/auth/login", {
