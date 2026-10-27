@@ -56,9 +56,11 @@ function publicUser(row) {
   return { id: row.id, name: row.name, email: row.email, role: row.role, shopId: row.shopId || null };
 }
 
-function shopNameById(shopId) {
-  const shop = store.read("shops").find((s) => s.id === shopId);
-  return shop ? shop.name : "";
+// Reads the shops once and returns a lookup of id -> name.
+function shopNames() {
+  const names = {};
+  for (const shop of store.read("shops")) names[shop.id] = shop.name;
+  return names;
 }
 
 // Counts how many distinct customers wishlisted each product of a shop.
@@ -196,6 +198,7 @@ app.get("/api/products", (req, res) => {
       ? store.read("wishlists").filter((w) => w.userId === req.user.id).map((w) => w.productId)
       : []
   );
+  const names = shopNames();
 
   const products = store
     .read("products")
@@ -207,7 +210,7 @@ app.get("/api/products", (req, res) => {
       return true;
     })
     .map((row) => ({
-      ...publicProduct(row, shopNameById(row.shopId)),
+      ...publicProduct(row, names[row.shopId] || ""),
       wishlisted: wishlisted.has(row.id)
     }));
 
@@ -219,7 +222,8 @@ app.get("/api/products/:id", (req, res) => {
   const row = store.read("products").find((p) => p.id === req.params.id);
   if (!row) return res.status(404).json({ message: "Product not found." });
   const counts = wishlistCounts(row.shopId);
-  res.json({ product: { ...publicProduct(row, shopNameById(row.shopId)), wishlistCount: counts[row.id] || 0 } });
+  const names = shopNames();
+  res.json({ product: { ...publicProduct(row, names[row.shopId] || ""), wishlistCount: counts[row.id] || 0 } });
 });
 
 // ---------------------------------------------------------------- wishlists
