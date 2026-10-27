@@ -1,0 +1,6 @@
+<!ELEMENT wishlists (wishlist*)>
+<!ELEMENT wishlist (id, userId, productId, createdAt)>
+<!ELEMENT id (#PCDATA)>
+<!ELEMENT userId (#PCDATA)>
+<!ELEMENT productId (#PCDATA)>
+<!ELEMENT createdAt (#PCDATA)>

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My shop · Grocery Availability</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/">Grocery<span>Availability</span></a>
+    <nav>
+      <a href="/">Browse</a>
+      <a href="/wishlist.html" id="wishlistLink" hidden>Wishlist</a>
+      <a href="/shop.html" id="shopLink" hidden>My Shop</a>
+      <a href="/login.html" id="loginLink">Sign in</a>
+      <button class="btn btn-outline btn-small" id="logoutBtn" hidden>Sign out</button>
+    </nav>
+  </header>
+
+  <main class="dashboard">
+    <div class="dashboard-head">
+      <div>
+        <p class="eyebrow">SHOP DASHBOARD</p>
+        <h1 id="shopName">My shop</h1>
+        <p id="shopAddress"></p>
+      </div>
+      <button class="btn btn-outline" id="toggleFormBtn" type="button">Add a product</button>
+    </div>
+
+    <div class="stat-row" id="statRow"></div>
+
+    <!-- Add product form -->
+    <form id="addForm" class="panel form-stack hidden" style="margin-bottom: 32px">
+      <h2 class="section-title" style="margin: 0">New product</h2>
+      <div class="field-row">
+        <label class="field">
+          <span>Name</span>
+          <input type="text" name="name" required maxlength="80" />
+        </label>
+        <label class="field">
+          <span>Type</span>
+          <select name="type" id="productType">
+            <option value="grocery">Grocery</option>
+            <option value="household">Household</option>
+          </select>
+        </label>
+      </div>
+      <div class="field-row">
+        <label class="field">
+          <span>Category</span>
+          <select name="category" id="productCategory"></select>
+        </label>
+        <label class="field">
+          <span>Unit</span>
+          <select name="unit" id="productUnit"></select>
+        </label>
+      </div>
+      <div class="field-row">
+        <label class="field">
+          <span>Price (₹)</span>
+          <input type="number" name="price" min="0.01" step="0.01" required />
+        </label>
+        <label class="field">
+          <span>Stock</span>
+          <input type="number" name="stock" min="0" step="1" required />
+        </label>
+      </div>
+      <label class="field">
+        <span>Image URL (optional)</span>
+        <input type="url" name="imageUrl" placeholder="https://example.com/photo.jpg" />
+        <span class="hint">Must start with http:// or https://. Leave blank for a plain tile.</span>
+      </label>
+      <p class="form-message" id="addMessage" role="status"></p>
+      <div>
+        <button class="btn" type="submit">Save product</button>
+        <button class="btn btn-quiet" type="button" id="cancelFormBtn">Cancel</button>
+      </div>
+    </form>
+
+    <h2 class="section-title">Inventory</h2>
+    <div class="table-scroll">
+      <table class="inventory">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Status</th>
+            <th>Wishlisted by</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="inventoryBody">
+          <tr><td colspan="7">Loading inventory…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="/js/app.js"></script>
+  <script src="/js/shop.js"></script>
+</body>
+</html>

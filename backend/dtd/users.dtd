@@ -1,0 +1,9 @@
+<!ELEMENT users (user*)>
+<!ELEMENT user (id, name, email, role, passwordHash, createdAt, shopId?)>
+<!ELEMENT id (#PCDATA)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT email (#PCDATA)>
+<!ELEMENT role (#PCDATA)>
+<!ELEMENT passwordHash (#PCDATA)>
+<!ELEMENT createdAt (#PCDATA)>
+<!ELEMENT shopId (#PCDATA)>

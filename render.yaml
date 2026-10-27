@@ -1,0 +1,26 @@
+# Render blueprint for Grocery Availability.
+# Create a Blueprint from this repo and Render will set everything up.
+#
+# The persistent disk keeps the XML files alive across restarts and redeploys.
+# Note: persistent disks are only available on paid Render plans.
+
+services:
+  - type: web
+    name: grocery-availability
+    runtime: node
+    plan: starter
+    region: singapore
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: DATA_DIR
+        value: /var/data
+    disk:
+      name: grocery-data
+      mountPath: /var/data
+      sizeGB: 1

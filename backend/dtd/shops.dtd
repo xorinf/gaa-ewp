@@ -1,0 +1,8 @@
+<!ELEMENT shops (shop*)>
+<!ELEMENT shop (id, ownerId, name, address, phone, createdAt)>
+<!ELEMENT id (#PCDATA)>
+<!ELEMENT ownerId (#PCDATA)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT address (#PCDATA)>
+<!ELEMENT phone (#PCDATA)>
+<!ELEMENT createdAt (#PCDATA)>

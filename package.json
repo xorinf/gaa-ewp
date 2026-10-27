@@ -1,0 +1,24 @@
+{
+  "name": "grocery-availability",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Grocery Availability - shops, stock, prices and wishlists stored in XML",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env backend/server.js",
+    "dev": "node --env-file-if-exists=.env --watch backend/server.js",
+    "seed": "node --env-file-if-exists=.env backend/seed.js",
+    "test": "node --test backend/test.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "fast-xml-parser": "^5.11.2",
+    "node-libxml": "^5.0.6"
+  },
+  "overrides": {
+    "tar": "^7.5.22"
+  },
+  "engines": {
+    "node": ">=22.9"
+  }
+}

@@ -1,0 +1,13 @@
+<!ELEMENT products (product*)>
+<!ELEMENT product (id, shopId, name, type, category, unit, price, stock, createdAt, updatedAt, imageUrl?)>
+<!ELEMENT id (#PCDATA)>
+<!ELEMENT shopId (#PCDATA)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT type (#PCDATA)>
+<!ELEMENT category (#PCDATA)>
+<!ELEMENT unit (#PCDATA)>
+<!ELEMENT price (#PCDATA)>
+<!ELEMENT stock (#PCDATA)>
+<!ELEMENT createdAt (#PCDATA)>
+<!ELEMENT updatedAt (#PCDATA)>
+<!ELEMENT imageUrl (#PCDATA)>

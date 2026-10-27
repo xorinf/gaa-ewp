@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign in · Grocery Availability</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/">Grocery<span>Availability</span></a>
+    <nav><a href="/">Browse</a></nav>
+  </header>
+
+  <main class="auth-wrap">
+    <h1 class="section-title">Account</h1>
+
+    <div class="tabs" role="tablist">
+      <button id="loginTab" role="tab" aria-selected="true">Sign in</button>
+      <button id="registerTab" role="tab" aria-selected="false">Create account</button>
+    </div>
+
+    <!-- Sign in -->
+    <form id="loginForm" class="panel form-stack">
+      <label class="field">
+        <span>Email</span>
+        <input type="email" name="email" required autocomplete="email" />
+      </label>
+      <label class="field">
+        <span>Password</span>
+        <input type="password" name="password" required autocomplete="current-password" />
+      </label>
+      <p class="form-message" id="loginMessage" role="status"></p>
+      <button class="btn" type="submit">Sign in</button>
+    </form>
+
+    <!-- Register -->
+    <form id="registerForm" class="panel form-stack hidden">
+      <label class="field">
+        <span>Your name</span>
+        <input type="text" name="name" required maxlength="80" autocomplete="name" />
+      </label>
+      <label class="field">
+        <span>Email</span>
+        <input type="email" name="email" required autocomplete="email" />
+      </label>
+      <label class="field">
+        <span>Password</span>
+        <input type="password" name="password" required minlength="6" autocomplete="new-password" />
+        <span class="hint">At least 6 characters.</span>
+      </label>
+      <label class="field">
+        <span>I am a</span>
+        <select name="role" id="roleSelect">
+          <option value="customer">Customer - browse and shop</option>
+          <option value="owner">Shop owner - manage my inventory</option>
+        </select>
+      </label>
+
+      <div id="shopFields" class="form-stack hidden">
+        <label class="field">
+          <span>Shop name</span>
+          <input type="text" name="shopName" maxlength="80" />
+        </label>
+        <label class="field">
+          <span>Shop address</span>
+          <input type="text" name="shopAddress" maxlength="160" />
+        </label>
+        <label class="field">
+          <span>Contact number</span>
+          <input type="tel" name="shopPhone" maxlength="20" />
+        </label>
+      </div>
+
+      <p class="form-message" id="registerMessage" role="status"></p>
+      <button class="btn" type="submit">Create account</button>
+    </form>
+
+    <p class="hint" style="margin-top: 16px">
+      Demo accounts (password <strong>demo1234</strong>): customer@example.com,
+      owner1@example.com, owner2@example.com.
+    </p>
+  </main>
+
+  <script src="/js/app.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>
