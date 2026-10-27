@@ -142,11 +142,33 @@ To set it up by hand instead:
 - Start command: `npm start`
 - Add the env vars from `.env.example`. Set `DATA_DIR` to the mount path of a
   **persistent disk** (for example `/var/data`) so the XML files survive
-  restarts and redeployments. Persistent disks need a paid plan; on the free
-  plan the data is lost when the service restarts.
+  restarts and redeployments.
 - Health check path: `/api/health`
 
 A fresh deployment seeds itself with the demo data on first start.
+
+### Persistent storage needs a paid plan
+
+Render's free plan has an ephemeral filesystem, and persistent disks are only
+available on the **Starter** plan or above ($7/month). Until a card is added to
+the Render account, `DATA_DIR` cannot be created and the app falls back to a
+folder inside the project, so **the data is lost on every restart and
+redeploy**. The app logs a warning when this happens.
+
+To get real persistence:
+
+1. Add a card at <https://dashboard.render.com/billing>.
+2. Attach a disk to the service, mounted at `/var/data` (the Dashboard's
+   **Disks** tab), or apply `render.yaml` as a Blueprint, which creates one.
+
+The rest of the app works either way - only the data lifetime changes.
+
+### A note on `npm ci`
+
+The project ships an `.npmrc` that sets `legacy-peer-deps=false`. Without it,
+a developer whose global `~/.npmrc` sets `legacy-peer-deps=true` generates a
+lockfile with a different dependency tree, and `npm ci` then fails on Render
+with "Missing: ... from lock file".
 
 ## Notes and limits
 
@@ -156,6 +178,8 @@ A fresh deployment seeds itself with the demo data on first start.
   secret changes.
 - Product images are loaded from the URL the owner saves. Only `http://` and
   `https://` URLs are accepted.
+- A product's wishlist count is only shown to the owner of the shop it belongs
+  to, so customer interest is not visible to other customers or visitors.
 
 ## Dev helper
 
